@@ -1,2 +1,2 @@
 # Mathnimatics
-Math animations.
+Community math animations.
