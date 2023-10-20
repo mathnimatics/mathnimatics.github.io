@@ -1,9 +1,11 @@
+---
 const { title } = Astro.props
+---
 
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <nav>
@@ -13,7 +15,8 @@ const { title } = Astro.props
     </nav>
     <h1>{title}</h1>
     <article>
-      <slot /> <!-- your content is injected here -->
+      <slot />
+      <!-- your content is injected here -->
     </article>
   </body>
 </html>
