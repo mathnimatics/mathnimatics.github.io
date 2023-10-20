@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource/inconsolata": "^5.0.14",
     "animejs": "^3.2.1",
     "astro": "^3.3.2"
   }
