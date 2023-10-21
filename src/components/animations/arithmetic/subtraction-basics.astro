@@ -140,18 +140,18 @@ import Controls from "../../animation/controls.astro"
   import controls from "../../animation/controls.js"
 
   let urlSillyHack = window.location.href.split("/")
-  if (urlSillyHack[urlSillyHack.length - 2] == "addition-basics") {
+  if (urlSillyHack[urlSillyHack.length - 1] == "subtraction-basics") {
 
   const canvas = document.getElementById("canvas")
 
   controls([
     {
-      text: "Addition is the simplest operation in Mathematics. Surely everyone has seen the above equation at some point in their lives.",
+      text: "Subtraction is the opposite of addition. Instead of adding two values, one value decreases the other.",
       play() {
         this.fx = document.createElement("h2")
         this.fx.id = "fx"
         this.fx.innerHTML =
-          '<span class="input input1 x">1</span> + <span class="input input2 x">1</span> = <span class="output">2</span>'
+          '<span class="input input1 x">1</span> - <span class="input input2 x">1</span> = <span class="output">0</span>'
         canvas.appendChild(this.fx)
       },
     },
