@@ -1,0 +1,62 @@
+---
+
+---
+
+<div id="controls" data-step="Step 0/~">
+  <button id="prev" title="Previous animation" disabled>&lt;</button>
+  <span id="captions">Loading...</span>
+  <button id="next" title="Next animation" disabled>&gt;</button>
+</div>
+
+<style>
+  div {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 40px;
+    font-size: 1.3rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 30px;
+    backdrop-filter: blur(10px);
+    max-width: 50%;
+  }
+  div::after {
+    content: attr(data-step);
+    position: absolute;
+    top: calc(100% + 5px);
+    font-size: 0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  #prev, #next {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    user-select: none;
+  }
+  #prev {
+    right: calc(100% + 20px);
+  }
+  #next {
+    left: calc(100% + 20px);
+  }
+  #prev:hover, #next:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  #prev:disabled, #next:disabled {
+    color: rgba(255, 255, 255, 0.1);
+    cursor: no-drop;
+  }
+
+  @media (max-width: 768px) {
+    div {
+      max-width: 80%;
+    }
+  }
+</style>

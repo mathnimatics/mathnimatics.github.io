@@ -1,0 +1,66 @@
+---
+import Canvas from "../../animation/canvas.astro"
+import Controls from "../../animation/controls.astro"
+---
+
+<style is:global>
+  #fx * {
+    transition: 200ms;
+  }
+  #fx {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0;
+    text-align: center;
+    margin: 0;
+  }
+</style>
+
+<Canvas />
+<Controls />
+
+<script>
+  import anime from "animejs"
+  import controls from "../../animation/controls.js"
+
+  const canvas = document.getElementById("canvas")
+  const fx = document.createElement("h2")
+  fx.id = "fx"
+  fx.innerHTML =
+    'f(<span class="input">x</span>) = <span class="output">x<sup>2</sup></span>'
+  canvas.appendChild(fx)
+
+  controls([
+    {
+      text: "Functions take an input, do something to it, and return an output.",
+      play() {
+        return anime({
+          targets: "#fx",
+          opacity: 1,
+        })
+      },
+    },
+    {
+      text: "The input (red) is called the argument, and the output (blue) is called the return value.",
+      play() {
+        this.anims = [
+          anime({
+            targets: "#fx .input",
+            color: "#FF0000",
+          }),
+          anime({
+            targets: "#fx .output",
+            color: "#0000FF",
+          }),
+        ]
+        return this.anims
+      },
+      undo() {
+        this.anims.forEach((anim) => anim.seek(0))
+      },
+    },
+  ])
+</script>

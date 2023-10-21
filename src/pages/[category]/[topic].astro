@@ -15,6 +15,10 @@ export async function getStaticPaths() {
 }
 
 let { category, topic } = Astro.params
+const Animation = (
+  await import(`../../components/animations/${category}/${topic}.astro`)
+).default
+
 const catRaw = category
 category = category
   ?.split("-")
@@ -31,6 +35,8 @@ topic = topic
   <h1>
     <a class="category" href={`/${catRaw}`}>{category}</a> &raquo; {topic}
   </h1>
+  <br />
+  <Animation />
 </BaseLayout>
 
 <style>

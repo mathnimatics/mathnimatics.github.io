@@ -1,0 +1,14 @@
+<div id="canvas"><slot /></div>
+
+<style>
+  #canvas {
+    position: relative;
+    overflow: hidden;
+    height: 500px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+  }
+  #canvas * {
+    transition: color 200ms;
+  }
+</style>
