@@ -140,7 +140,7 @@ import Controls from "../../animation/controls.astro"
   import controls from "../../animation/controls.js"
 
   let urlSillyHack = window.location.href.split("/")
-  if (urlSillyHack[urlSillyHack.length - 1] == "subtraction-basics") {
+  if (!urlSillyHack[urlSillyHack.length - 2].includes("subtraction-basics")) {
 
   const canvas = document.getElementById("canvas")
 
