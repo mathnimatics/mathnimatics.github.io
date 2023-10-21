@@ -1,0 +1,257 @@
+---
+import Canvas from "../../animation/canvas.astro"
+import Controls from "../../animation/controls.astro"
+---
+
+<style is:global>
+  #fx * {
+    transition: 200ms;
+  }
+  #fx {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    font-size: clamp(1rem, 10vw, 2rem);
+    text-align: center;
+    margin: 0;
+  }
+  #graph {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #2a2a2a;
+  }
+  #graph * {
+    transition: 200ms;
+  }
+  .tick:last-child {
+    visibility: hidden;
+  }
+  .tick:first-child::after {
+    display: none;
+  }
+  .tick::after {
+    content: attr(data-tick);
+    position: absolute;
+    font-size: 0.7rem;
+  }
+  .tick::before {
+    content: "";
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  #x-axis {
+    --color: red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  #x-axis::after {
+    content: "x-axis";
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    pointer-events: none;
+    font-weight: bold;
+    color: var(--color-x);
+    transition: 200ms;
+  }
+  #x-axis .tick {
+    height: 5px;
+    width: 1px;
+    background-color: white;
+    position: relative;
+  }
+  #x-axis .tick::after {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+  }
+  #x-axis .tick::before {
+    width: 1px;
+    height: 1000px;
+    bottom: 0;
+    position: absolute;
+  }
+
+  #y-axis {
+    --color: blue;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+  }
+  #y-axis::after {
+    content: "y-axis";
+    position: absolute;
+    top: 0;
+    left: 5px;
+    width: 100px;
+    pointer-events: none;
+    font-weight: bold;
+    color: var(--color-y);
+    transition: 200ms;
+  }
+  #y-axis .tick {
+    width: 5px;
+    height: 1px;
+    background-color: white;
+    position: relative;
+  }
+  #y-axis .tick::after {
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  #y-axis .tick::before {
+    width: 1000px;
+    height: 1px;
+    left: 0;
+    position: absolute;
+  }
+  #ev {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: clamp(1rem, 10vw, 2rem);
+    font-size: 2rem;
+  }
+  .dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    transform: translate(-50%, -50%);
+  }
+</style>
+
+<Canvas />
+<Controls />
+
+<script>
+  import anime from "animejs"
+  import controls from "../../animation/controls.js"
+
+  let urlSillyHack = window.location.href.split("/")
+  if (!urlSillyHack[urlSillyHack.length - 2].includes("addition-basics")) {
+
+  const canvas = document.getElementById("canvas")
+
+  controls([
+    {
+      text: "Addition is the simplest operation in Mathematics. Surely everyone has seen the above equation at some point in their lives.",
+      play() {
+        this.fx = document.createElement("h2")
+        this.fx.id = "fx"
+        this.fx.innerHTML =
+          '<span class="input input1 x">1</span> + <span class="input input2 x">1</span> = <span class="output">2</span>'
+        canvas.appendChild(this.fx)
+      },
+    },
+    {
+      text: "With addition, you can combine the values of two or more numbers together, into one single number.",
+      play() {
+        var tl = anime.timeline({
+            duration: 1000
+        })
+        tl.add({
+          targets: "#fx .input1",
+          duration: 1000,
+          color: "#FF0000",
+
+        })
+        tl.add({
+          targets: "#fx .input2",
+          duration: 1000,
+          color: "#0000FF",
+        })
+        tl.add({
+          targets: "#fx .output",
+          duration: 1000,
+          color: "#00FF00",
+        })
+        tl.add({
+          targets: ".input",
+          duration: 1000,
+          color: "#00FF00"
+        })
+      },
+    },
+    {
+      text: "Addition works with all kinds of numbers.",
+      play() {
+        document.querySelector("#fx .input2").innerHTML = String(1)
+        document.querySelector("#fx .output").innerHTML = String(2)
+
+        this.timeout = null
+        const animate = (i = 1) => {
+          if (i > 100) return
+          this.timeout = setTimeout(
+            () => {
+              document.querySelector("#fx .input1").innerHTML = String(i)
+              this.timeout = setTimeout(() => {
+                document.querySelector("#fx .output").innerHTML = String(i + 1)
+                animate(i + 1)
+              }, 500 / i)
+            },
+            Math.round(500 / i),
+          )
+        }
+
+        animate()
+      },
+    },
+    {
+      text: "...and both inputs affect the result equally.",
+      play() {
+        document.querySelector("#fx .input1").innerHTML = String(100)
+        this.timeout = null
+        const animate = (i = 2) => {
+          if (i > 200) return
+          this.timeout = setTimeout(
+            () => {
+              document.querySelector("#fx .input2").innerHTML = String(i)
+              this.timeout = setTimeout(() => {
+                document.querySelector("#fx .output").innerHTML = String(i + 100)
+                animate(i + 1)
+              }, 500 / i)
+            },
+            Math.round(500 / i),
+          )
+        }
+
+        animate()
+      },
+    },
+    {
+      text: "Isn't that neat?",
+      play() {
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(100)
+          document.querySelector("#fx .input2").innerHTML = String(200)
+          document.querySelector("#fx .output").innerHTML = String(300)
+        }, 150)
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(10)
+          document.querySelector("#fx .input2").innerHTML = String(20)
+          document.querySelector("#fx .output").innerHTML = String(30)
+        }, 300)
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(1)
+          document.querySelector("#fx .input2").innerHTML = String(2)
+          document.querySelector("#fx .output").innerHTML = String(3)
+        }, 600)
+        
+
+      },
+    }
+  ])
+}
+</script>

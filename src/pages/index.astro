@@ -3,7 +3,17 @@ import BaseLayout from "../layouts/BaseLayout.astro"
 import Categories from "../components/cards/categories.astro"
 ---
 
+<script>
+  import anime from "animejs"
+  function logoAnimation() {
+    anime({
+      targets: "#logo",
+      scale: 0,
+    })
+  }
+</script>
 <BaseLayout title="Home">
+  <h2><a id="logo" onclick="logoAnimation()" href="#" style="color:white; text-decoration:none">Welcome to Mathnimatics</a></h2>
   <h1>What do you want to visualize?</h1>
   <br />
   <Categories />
