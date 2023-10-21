@@ -1,0 +1,21 @@
+---
+import { folders } from "../../util"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import Topics from "../../components/cards/topics.astro"
+
+export async function getStaticPaths() {
+  const categories = await folders("src/components/animations")
+  return categories.map((category) => ({ params: { category } }))
+}
+
+const { category } = Astro.params
+const title = category
+  ?.split("-")
+  .map((word) => word[0].toUpperCase() + word.slice(1))
+---
+
+<BaseLayout title={title}>
+  <h1>{"Vizualize " + title}</h1>
+  <br />
+  <Topics />
+</BaseLayout>

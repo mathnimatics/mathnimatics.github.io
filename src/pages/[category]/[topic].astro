@@ -1,0 +1,44 @@
+---
+import { files, folders } from "../../util"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+
+export async function getStaticPaths() {
+  const categories = await folders("src/components/animations")
+  const ret = []
+  for (const category of categories) {
+    const topics = (await files(`src/components/animations/${category}`)).map(
+      (file) => file.split(".")[0],
+    )
+    topics.forEach((topic) => ret.push({ params: { category, topic } }))
+  }
+  return ret
+}
+
+let { category, topic } = Astro.params
+const catRaw = category
+category = category
+  ?.split("-")
+  .map((word) => word[0].toUpperCase() + word.slice(1))
+  .join(" ")
+topic = topic
+  ?.split(".")[0]
+  .split("-")
+  .map((word) => word[0].toUpperCase() + word.slice(1))
+  .join(" ")
+---
+
+<BaseLayout title={topic}>
+  <h1>
+    <a class="category" href={`/${catRaw}`}>{category}</a> &raquo; {topic}
+  </h1>
+</BaseLayout>
+
+<style>
+  .category {
+    text-decoration: none;
+    color: rgb(150, 150, 150);
+  }
+  .category:hover {
+    text-decoration: underline;
+  }
+</style>

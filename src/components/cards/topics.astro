@@ -1,0 +1,83 @@
+---
+import { files } from "../../util"
+const { category } = Astro.params
+const topics = (await files(`src/components/animations/${category}`)).map(
+  (name) => ({
+    name: name
+      .split(".")[0]
+      .split("-")
+      .map((word) => word[0].toUpperCase() + word.slice(1))
+      .join(" "),
+    url: `/${category}/${name.split(".")[0]}`,
+  }),
+)
+---
+
+<div class="wrapper">
+  {
+    topics.map((topic) => (
+      <a href={topic.url} class="card topics">
+        {topic.name}
+        <span>&rarr;</span>
+      </a>
+    ))
+  }
+</div>
+
+<script>
+  const cats = document.querySelectorAll(".card.topics")
+  cats.forEach((cat) => {
+    cat.addEventListener("mousemove", (e) => {
+      const rect = cat.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      cat.style.setProperty("--x", `${x}px`)
+      cat.style.setProperty("--y", `${y}px`)
+    })
+  })
+</script>
+
+<style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @property --c {
+    syntax: "<color>";
+    initial-value: rgba(255, 255, 255, 0);
+    inherits: false;
+  }
+  @property --size {
+    syntax: "<length>";
+    initial-value: 100px;
+    inherits: false;
+  }
+  .card {
+    --x: 0px;
+    --y: 0px;
+    font-size: 1.5rem;
+    border: 2px solid #f7f7f7;
+    width: 100%;
+    padding: 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    color: #f7f7f7;
+    text-decoration: none;
+    background: radial-gradient(
+      circle at var(--x) var(--y),
+      var(--c) 0px,
+      transparent var(--size)
+    );
+    transition:
+      --size 400ms,
+      --c 200ms,
+      background-size 200ms;
+  }
+  .card:hover {
+    --c: rgba(255, 255, 255, 0.1);
+  }
+  .card:active {
+    --size: 500px;
+  }
+</style>
