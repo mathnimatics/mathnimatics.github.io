@@ -140,7 +140,7 @@ import Controls from "../../animation/controls.astro"
   import controls from "../../animation/controls.js"
 
   let urlSillyHack = window.location.href.split("/")
-  if (!urlSillyHack[urlSillyHack.length - 2].includes("subtraction-basics")) {
+  if (urlSillyHack.includes("subtraction-basics")) {
 
   const canvas = document.getElementById("canvas")
 
@@ -156,7 +156,36 @@ import Controls from "../../animation/controls.astro"
       },
     },
     {
-      text: "With addition, you can combine the values of two or more numbers together, into one single number.",
+      text: "With subtraction, the value on the left of the operator (-) is the value being deducted.",
+      play() {
+        var tl = anime.timeline({
+            duration: 1000
+        })
+        tl.add({
+          targets: "#fx .input1",
+          duration: 1000,
+          color: "#FF0000",
+
+        })
+        tl.add({
+          targets: "#fx .input2",
+          duration: 1000,
+          color: "#0000FF",
+        })
+        tl.add({
+          targets: "#fx .output",
+          duration: 1000,
+          color: "#00FF00",
+        })
+        tl.add({
+          targets: ".input",
+          duration: 1000,
+          color: "#00FF00"
+        })
+      },
+    },
+    {
+      text: "...and the value on the right of the operator (-) is the value to deduct the first.",
       play() {
         var tl = anime.timeline({
             duration: 1000
