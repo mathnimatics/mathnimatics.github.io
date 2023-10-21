@@ -1,0 +1,221 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+
+---
+
+<BaseLayout title="Home">
+
+  
+  
+  <main>
+
+    <style>
+      .square {
+        pointer-events: none;
+        position: relative;
+        width: 20px;
+        height: 20px;
+        margin: 1px;
+        background-color: currentColor;
+        font-size: 14px;
+      }
+
+      .button {
+        background-color: #222;
+        border-radius: 4px;
+        border-style: none;
+        box-sizing: border-box;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.5;
+        margin: 0;
+        max-width: none;
+        min-height: 44px;
+        min-width: 10px;
+        outline: none;
+        overflow: hidden;
+        padding: 9px 20px 8px;
+        position: relative;
+        text-align: center;
+        text-transform: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+
+      .button:hover {
+        opacity: .75;
+      }
+
+    </style>
+
+    <script>
+      total_num = 16
+      show_word = false
+
+      squares = {
+        25: "twenty-five",
+        24: "twenty-four",
+        23: "twenty-three",
+        22: "twenty-two",
+        21: "twenty-one",
+        20: "twenty",
+        19: "nineteen",
+        18: "eighteen",
+        17: "seventeen",
+        16: "sixteen",
+        15: "fifteen",
+        14: "fourteen",
+        13: "thirteen",
+        12: "twelve",
+        11: "eleven",
+        10: "ten",
+        9: "nine",
+        8: "eight",
+        7: "seven",
+        6: "six",
+        5: "five",
+        4: "four",
+        3: "three",
+        2: "two",
+        1: "one",
+        0: "zero"
+      }
+
+    </script>
+
+    <h2 id="number" class="bignum">16</h2>
+
+    <div id="mega-div" style="overflow: hidden">
+        <div id="first-div" style="float: left">
+          <div id="one" class="square"></div>
+          <div id="two" class="square"></div>
+          <div id="three" class="square"></div>
+          <div id="four" class="square"></div>
+        </div>
+    
+        <div id="second-div" style="float: left">
+          <div id="five" class="square"></div>
+          <div id="six" class="square"></div>
+          <div id="seven" class="square"></div>
+          <div id="eight" class="square"></div>
+        </div>
+  
+        <div id="third-div" style="float: left">
+          <div id="nine" class="square"></div>
+          <div id="ten" class="square"></div>
+          <div id="eleven" class="square"></div>
+          <div id="twelve" class="square"></div>
+        </div>
+  
+        <div id="fourth-div" style="float: left">
+          <div id="thirteen" class="square"></div>
+          <div id="fourteen" class="square"></div>
+          <div id="fifteen" class="square"></div>
+          <div id="sixteen" class="square"></div>
+        </div>
+  
+      </div>
+
+    <script>
+        anime({
+          targets: ".inactive",
+          translateX: 500,
+          duration: 0,
+          scale: 0,
+          easing: 'easeInOutSine',
+        })
+
+        function update_text() {
+          document.getElementById("number").innerHTML = total_num + (show_word ? " (" + squares[total_num] + ")" : "")
+        }
+
+        function showWord() {
+          show_word = !show_word;
+          update_text()
+        }
+
+        function divideTwo() {
+          if (total_num <= 1) {
+            anime({
+              targets: "#number",
+              duration: 250,
+              translateX: [0, 4, -4, 0],
+              easing: 'easeInOutSine'
+            })
+            return
+          }
+
+        affected = []
+        for (var i = 1; i <= total_num; i++) {
+            if (i > total_num / 2) {
+                affected.push("#" + squares[i])
+            }
+        }
+        console.log(affected)
+        total_num /= 2
+        update_text()
+        anime({
+            targets: "#number",
+            duration: 150,
+            translateY: [0, 8],
+            easing: 'easeInOutSine',
+            direction: 'alternate'
+        })
+
+        anime({
+            targets: affected,
+            keyframes: [
+                {translateX: 200},
+                {scale: 0}
+            ],
+            duration: 2000,
+            easing: 'easeInOutSine',
+        })
+        }
+
+        function appearAll() {
+          if (total_num >= 16) {
+            anime({
+              targets: "#number",
+              duration: 250,
+              translateX: [0, 4, -4, 0],
+              easing: 'easeInOutSine'
+            })
+            return
+          }
+
+          anime.remove(".square")
+
+          anime({
+            targets: ".square",
+            translateX: 0,
+            duration: 800,
+            scale: 1,
+            easing: 'easeInOutSine',
+          })
+          total_num = 16
+          update_text()
+          anime({
+            targets: "#number",
+            duration: 150,
+            translateY: [0, -8],
+            easing: 'easeInOutSine',
+            direction: 'alternate'
+          })
+        }
+    </script>
+    
+    <br>
+
+    <button class="button" onclick="divideTwo()">Divide by Two</button>
+    <button class="button" onclick="appearAll()">Reset</button>
+    <button class="button" onclick="showWord()">Show Number as Word</button>
+
+    
+  </main> 
+</BaseLayout>
