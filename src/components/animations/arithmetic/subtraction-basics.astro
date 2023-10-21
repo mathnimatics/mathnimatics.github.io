@@ -164,60 +164,29 @@ import Controls from "../../animation/controls.astro"
         tl.add({
           targets: "#fx .input1",
           duration: 1000,
-          color: "#FF0000",
-
-        })
-        tl.add({
-          targets: "#fx .input2",
-          duration: 1000,
           color: "#0000FF",
-        })
-        tl.add({
-          targets: "#fx .output",
-          duration: 1000,
-          color: "#00FF00",
-        })
-        tl.add({
-          targets: ".input",
-          duration: 1000,
-          color: "#00FF00"
+
         })
       },
     },
     {
-      text: "...and the value on the right of the operator (-) is the value to deduct the first.",
+      text: "...and the value on the right of the operator (-) is the value to deduct the first with.",
       play() {
         var tl = anime.timeline({
             duration: 1000
         })
         tl.add({
-          targets: "#fx .input1",
-          duration: 1000,
-          color: "#FF0000",
-
-        })
-        tl.add({
           targets: "#fx .input2",
           duration: 1000,
-          color: "#0000FF",
-        })
-        tl.add({
-          targets: "#fx .output",
-          duration: 1000,
-          color: "#00FF00",
-        })
-        tl.add({
-          targets: ".input",
-          duration: 1000,
-          color: "#00FF00"
+          color: "#FF0000",
         })
       },
     },
     {
-      text: "Addition works with all kinds of numbers.",
+      text: "When the left value increases, the output increases.",
       play() {
         document.querySelector("#fx .input2").innerHTML = String(1)
-        document.querySelector("#fx .output").innerHTML = String(2)
+        document.querySelector("#fx .output").innerHTML = String(0)
 
         this.timeout = null
         const animate = (i = 1) => {
@@ -226,7 +195,7 @@ import Controls from "../../animation/controls.astro"
             () => {
               document.querySelector("#fx .input1").innerHTML = String(i)
               this.timeout = setTimeout(() => {
-                document.querySelector("#fx .output").innerHTML = String(i + 1)
+                document.querySelector("#fx .output").innerHTML = String(i - 1)
                 animate(i + 1)
               }, 500 / i)
             },
@@ -238,17 +207,17 @@ import Controls from "../../animation/controls.astro"
       },
     },
     {
-      text: "...and both inputs affect the result equally.",
+      text: "...but the right value causes the output to decrease.",
       play() {
         document.querySelector("#fx .input1").innerHTML = String(100)
         this.timeout = null
-        const animate = (i = 2) => {
-          if (i > 200) return
+        const animate = (i = 1) => {
+          if (i > 100) return
           this.timeout = setTimeout(
             () => {
               document.querySelector("#fx .input2").innerHTML = String(i)
               this.timeout = setTimeout(() => {
-                document.querySelector("#fx .output").innerHTML = String(i + 100)
+                document.querySelector("#fx .output").innerHTML = String(100 - i)
                 animate(i + 1)
               }, 500 / i)
             },
@@ -260,23 +229,24 @@ import Controls from "../../animation/controls.astro"
       },
     },
     {
-      text: "Isn't that neat?",
+      text: "And that's division!",
       play() {
         setTimeout(() => {
           document.querySelector("#fx .input1").innerHTML = String(100)
-          document.querySelector("#fx .input2").innerHTML = String(200)
-          document.querySelector("#fx .output").innerHTML = String(300)
+          document.querySelector("#fx .input2").innerHTML = String(100)
         }, 150)
         setTimeout(() => {
           document.querySelector("#fx .input1").innerHTML = String(10)
-          document.querySelector("#fx .input2").innerHTML = String(20)
-          document.querySelector("#fx .output").innerHTML = String(30)
+          document.querySelector("#fx .input2").innerHTML = String(10)
         }, 300)
         setTimeout(() => {
           document.querySelector("#fx .input1").innerHTML = String(1)
-          document.querySelector("#fx .input2").innerHTML = String(2)
-          document.querySelector("#fx .output").innerHTML = String(3)
+          document.querySelector("#fx .input2").innerHTML = String(1)
         }, 600)
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(0)
+          document.querySelector("#fx .input2").innerHTML = String(0)
+        }, 1000)
         
 
       },
