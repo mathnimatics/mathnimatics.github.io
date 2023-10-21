@@ -187,8 +187,8 @@ import Controls from "../../animation/controls.astro"
     {
       text: "Addition works with all kinds of numbers.",
       play() {
-        document.querySelector("#fx .input2").innerHTML = String(2)
-        document.querySelector("#fx .output").innerHTML = String(3)
+        document.querySelector("#fx .input2").innerHTML = String(1)
+        document.querySelector("#fx .output").innerHTML = String(2)
 
         this.timeout = null
         const animate = (i = 1) => {
@@ -197,7 +197,7 @@ import Controls from "../../animation/controls.astro"
             () => {
               document.querySelector("#fx .input1").innerHTML = String(i)
               this.timeout = setTimeout(() => {
-                document.querySelector("#fx .output").innerHTML = String(i + 2)
+                document.querySelector("#fx .output").innerHTML = String(i + 1)
                 animate(i + 1)
               }, 500 / i)
             },
@@ -214,7 +214,7 @@ import Controls from "../../animation/controls.astro"
         document.querySelector("#fx .input1").innerHTML = String(100)
         this.timeout = null
         const animate = (i = 2) => {
-          if (i > 100) return
+          if (i > 200) return
           this.timeout = setTimeout(
             () => {
               document.querySelector("#fx .input2").innerHTML = String(i)
@@ -228,6 +228,28 @@ import Controls from "../../animation/controls.astro"
         }
 
         animate()
+      },
+    },
+    {
+      text: "Isn't that neat?",
+      play() {
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(100)
+          document.querySelector("#fx .input2").innerHTML = String(200)
+          document.querySelector("#fx .output").innerHTML = String(300)
+        }, 150)
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(10)
+          document.querySelector("#fx .input2").innerHTML = String(20)
+          document.querySelector("#fx .output").innerHTML = String(30)
+        }, 300)
+        setTimeout(() => {
+          document.querySelector("#fx .input1").innerHTML = String(1)
+          document.querySelector("#fx .input2").innerHTML = String(2)
+          document.querySelector("#fx .output").innerHTML = String(3)
+        }, 600)
+        
+
       },
     }
   ])
