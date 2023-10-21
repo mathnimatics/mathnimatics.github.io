@@ -12,10 +12,123 @@ import Controls from "../../animation/controls.astro"
     left: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
-    font-size: 3rem;
-    opacity: 0;
+    font-size: clamp(1rem, 10vw, 2rem);
     text-align: center;
     margin: 0;
+  }
+  #graph {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #2a2a2a;
+  }
+  #graph * {
+    transition: 200ms;
+  }
+  .tick:last-child {
+    visibility: hidden;
+  }
+  .tick:first-child::after {
+    display: none;
+  }
+  .tick::after {
+    content: attr(data-tick);
+    position: absolute;
+    font-size: 0.7rem;
+  }
+  .tick::before {
+    content: "";
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  #x-axis {
+    --color: red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  #x-axis::after {
+    content: "x-axis";
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    pointer-events: none;
+    font-weight: bold;
+    color: var(--color-x);
+    transition: 200ms;
+  }
+  #x-axis .tick {
+    height: 5px;
+    width: 1px;
+    background-color: white;
+    position: relative;
+  }
+  #x-axis .tick::after {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+  }
+  #x-axis .tick::before {
+    width: 1px;
+    height: 1000px;
+    bottom: 0;
+    position: absolute;
+  }
+
+  #y-axis {
+    --color: blue;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+  }
+  #y-axis::after {
+    content: "y-axis";
+    position: absolute;
+    top: 0;
+    left: 5px;
+    width: 100px;
+    pointer-events: none;
+    font-weight: bold;
+    color: var(--color-y);
+    transition: 200ms;
+  }
+  #y-axis .tick {
+    width: 5px;
+    height: 1px;
+    background-color: white;
+    position: relative;
+  }
+  #y-axis .tick::after {
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  #y-axis .tick::before {
+    width: 1000px;
+    height: 1px;
+    left: 0;
+    position: absolute;
+  }
+  #ev {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: clamp(1rem, 10vw, 2rem);
+    font-size: 2rem;
+  }
+  .dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    transform: translate(-50%, -50%);
   }
 </style>
 
@@ -27,39 +140,221 @@ import Controls from "../../animation/controls.astro"
   import controls from "../../animation/controls.js"
 
   const canvas = document.getElementById("canvas")
-  const fx = document.createElement("h2")
-  fx.id = "fx"
-  fx.innerHTML =
-    'f(<span class="input">x</span>) = <span class="output">x<sup>2</sup></span>'
-  canvas.appendChild(fx)
 
   controls([
     {
       text: "Functions take an input, do something to it, and return an output.",
       play() {
-        return anime({
-          targets: "#fx",
-          opacity: 1,
-        })
+        this.fx = document.createElement("h2")
+        this.fx.id = "fx"
+        this.fx.innerHTML =
+          'f(<span class="input x">x</span>) = <span class="output"><span class="x">x</span><sup>2</sup></span>'
+        canvas.appendChild(this.fx)
       },
     },
     {
       text: "The input (red) is called the argument, and the output (blue) is called the return value.",
       play() {
-        this.anims = [
-          anime({
-            targets: "#fx .input",
-            color: "#FF0000",
-          }),
-          anime({
-            targets: "#fx .output",
-            color: "#0000FF",
-          }),
-        ]
-        return this.anims
+        anime({
+          targets: "#fx .input",
+          color: "#FF0000",
+        })
+        anime({
+          targets: "#fx .output",
+          color: "#0000FF",
+        })
       },
-      undo() {
-        this.anims.forEach((anim) => anim.seek(0))
+    },
+    {
+      text: "The argument 'x' will be replaced with the value you give the function. Let's call f(2).",
+      play() {
+        anime({
+          targets: "#fx .x",
+          innerHTML: 2,
+          round: 1,
+        })
+      },
+    },
+    {
+      text: "We evaluate the function value.",
+      play() {
+        anime({
+          targets: "#fx .output",
+          innerHTML: 4,
+          round: 1,
+        })
+      },
+    },
+    {
+      text: "We can give the function any number we want...",
+      play() {
+        this.timeout = null
+        const animate = (i = 0) => {
+          if (i > 100) return
+          this.timeout = setTimeout(
+            () => {
+              document.querySelector("#fx .x").innerHTML = String(i)
+              this.timeout = setTimeout(() => {
+                document.querySelector("#fx .output").innerHTML = String(i ** 2)
+                animate(i + 1)
+              }, 500 / i)
+            },
+            Math.round(500 / i),
+          )
+        }
+
+        animate()
+      },
+    },
+    {
+      text: "Sometimes we want to vizualize the function — take a look at this empty graph.",
+      play() {
+        canvas.innerHTML = ""
+        const graph = document.createElement("div")
+        graph.id = "graph"
+
+        const xAxis = document.createElement("div")
+        xAxis.id = "x-axis"
+        const yAxis = document.createElement("div")
+        yAxis.id = "y-axis"
+
+        for (let i = 0; i < 10; i++) {
+          const xTick = document.createElement("div")
+          xTick.classList.add("tick")
+          xTick.dataset.tick = String(i * 10)
+          xAxis.appendChild(xTick)
+
+          const yTick = document.createElement("div")
+          yTick.classList.add("tick")
+          yTick.dataset.tick = String(i * 1000)
+          yAxis.appendChild(yTick)
+        }
+        graph.append(xAxis, yAxis)
+
+        canvas.appendChild(graph)
+      },
+    },
+    {
+      text: "The x axis is responsible for the input, and the y axis is responsible for the output.",
+      play() {
+        const xAxis = document.getElementById("x-axis")
+        const yAxis = document.getElementById("y-axis")
+        xAxis.style.setProperty("--color-x", "#FF0000")
+        yAxis.style.setProperty("--color-y", "#0000FF")
+      },
+    },
+    {
+      text: "Let's plot f(60).",
+      play() {
+        anime({
+          targets: "#x-axis .tick:nth-child(7)",
+          scale: 2,
+        })
+      },
+    },
+    {
+      text: "Replace 'x' in the function with 60.",
+      play() {
+        const ev = document.createElement("span")
+        ev.id = "ev"
+        ev.innerHTML = "f(60) = 60<sup>2</sup> = 3600"
+        canvas.appendChild(ev)
+        anime({
+          targets: "#ev",
+          scale: [0, 1],
+        })
+      },
+    },
+    {
+      text: "Find that value on the output (y-axis)...",
+      play() {
+        const dims = document.getElementById("graph").getBoundingClientRect()
+        const timeline = anime.timeline()
+        timeline.add({
+          targets: "#ev",
+          opacity: 0,
+          complete() {
+            document.getElementById("ev").remove()
+          },
+        })
+
+        const dot = document.createElement("span")
+        dot.classList.add("dot")
+        document.getElementById("graph").appendChild(dot)
+        dot.style.top = "20px"
+        dot.style.left = "20px"
+
+        timeline.add({
+          targets: ".dot",
+          top: `${dims.height * 0.6}px`,
+          left: "20px",
+          translateY: "-50%",
+          translateX: "-50%",
+          scale: [0, 1],
+        })
+        timeline.add({
+          targets: ".dot",
+          left: `${dims.width * (2 / 3)}px`,
+        })
+        timeline.add({
+          targets: ".dot",
+          scale: 2,
+        })
+      },
+    },
+    {
+      text: "Now repeat for other values, and we get our graph!",
+      play() {
+        anime({
+          targets: "#x-axis .tick:nth-child(7)",
+          scale: 1,
+        })
+        anime({
+          targets: ".dot",
+          scale: 0,
+          complete() {
+            document.querySelector(".dot").remove()
+          },
+        })
+
+        const dims = document.getElementById("graph").getBoundingClientRect()
+        for (let i = 0; i < 94; i++) {
+          const dot = document.createElement("span")
+          dot.classList.add("dot")
+          document.getElementById("graph").appendChild(dot)
+          dot.style.bottom = `${dims.height * (i ** 2 / 9000)}px`
+          dot.style.left = `${dims.width * (i / 90)}px`
+          dot.style.opacity = "0"
+        }
+        setTimeout(
+          () =>
+            anime({
+              targets: ".dot",
+              opacity: 1,
+              translateY: ["-1000px", "-50%"],
+              delay: anime.stagger(10),
+            }),
+          1000,
+        )
+      },
+    },
+    {
+      text: "watcha lookin at",
+      play() {
+        const potato = document.createElement("span")
+        potato.innerHTML = "🥔"
+        potato.style.position = "absolute"
+        potato.style.top = "50%"
+        potato.style.left = "50%"
+        potato.style.transform = "translate(-50%, -50%)"
+        potato.id = "potato"
+        canvas.appendChild(potato)
+        anime({
+          targets: "#potato",
+          scale: [0, 10],
+          rotate: [0, 360],
+          duration: 1000,
+        })
       },
     },
   ])

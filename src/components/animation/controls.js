@@ -1,5 +1,6 @@
-export default (arr) => {
+export default arr => {
   let index = -1
+  const canvas = document.getElementById("canvas")
   const controls = document.getElementById("controls")
   const prev = document.getElementById("prev"),
     next = document.getElementById("next")
@@ -7,31 +8,45 @@ export default (arr) => {
 
   next.addEventListener("click", nextStep)
   prev.addEventListener("click", prevStep)
+  window.addEventListener("keydown", e => {
+    if (index !== arr.length - 1 && e.key === "ArrowRight") nextStep()
+    else if (index !== 0 && e.key === "ArrowLeft") prevStep()
+  })
 
-  const anims = []
-  const stop = () => anims.forEach((a) => a.pause())
+  const state = []
 
+  const stop = () =>
+    anims.forEach(a =>
+      Array.isArray(a) ? a.forEach(b => b.pause()) : a.pause()
+    )
+
+  let queue
   function nextStep() {
-    stop()
+    if (typeof arr?.[index]?.timeout !== "undefined")
+      clearTimeout(arr[index].timeout)
+
     const curr = arr[++index]
     captions.innerText = curr.text
     controls.dataset.step = `Step ${index + 1}/${arr.length}`
 
-    const anim = curr.play()
-    if (Array.isArray(anim)) anims.push(...anim)
-    else anims.push(anim)
+    if (typeof queue !== "undefined") state.push(queue)
+    queue = canvas.innerHTML
+
+    curr.play()
 
     disableManager()
   }
   function prevStep() {
-    stop()
-    arr[index].undo()
+    if (typeof arr?.[index]?.timeout !== "undefined")
+      clearTimeout(arr[index].timeout)
+
+    canvas.innerHTML = state.pop()
+    queue = state.pop() ?? ""
+
     const curr = arr[--index]
     captions.innerText = curr.text
     controls.dataset.step = `Step ${index + 1}/${arr.length}`
-    const anim = curr.play()
-    if (Array.isArray(anim)) anims.push(...anim)
-    else anims.push(anim)
+    curr.play()
 
     disableManager()
   }

@@ -3,9 +3,13 @@
 ---
 
 <div id="controls" data-step="Step 0/~">
-  <button id="prev" title="Previous animation" disabled>&lt;</button>
+  <button id="prev" title="Previous animation (left arrow key)" disabled
+    >&lt;</button
+  >
   <span id="captions">Loading...</span>
-  <button id="next" title="Next animation" disabled>&gt;</button>
+  <button id="next" title="Next animation (right arrow key)" disabled
+    >&gt;</button
+  >
 </div>
 
 <style>
@@ -29,7 +33,8 @@
     left: 50%;
     transform: translateX(-50%);
   }
-  #prev, #next {
+  #prev,
+  #next {
     outline: none;
     border: none;
     cursor: pointer;
@@ -46,10 +51,12 @@
   #next {
     left: calc(100% + 20px);
   }
-  #prev:hover, #next:hover {
+  #prev:hover,
+  #next:hover {
     color: rgba(255, 255, 255, 0.5);
   }
-  #prev:disabled, #next:disabled {
+  #prev:disabled,
+  #next:disabled {
     color: rgba(255, 255, 255, 0.1);
     cursor: no-drop;
   }
