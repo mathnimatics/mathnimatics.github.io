@@ -32,3 +32,19 @@ textarea,
 select {
   font: inherit;
 }
+
+
+.square {
+  pointer-events: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin: 1px;
+  background-color: currentColor;
+  font-size: 14px;
+}
+
+#first-div {
+  display: flex;
+  flex-wrap: wrap;
+}
