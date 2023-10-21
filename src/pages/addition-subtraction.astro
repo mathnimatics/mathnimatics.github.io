@@ -1,29 +1,24 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro"
-
 ---
 
 <BaseLayout title="Home">
 
   <main>
 
-    <style>
-      .square {
-        pointer-events: none;
-        position: relative;
-        width: 20px;
-        height: 20px;
-        margin: 1px;
-        background-color: currentColor;
-        font-size: 14px;
-      }
-
-    </style>
-
     <script>
-      total_num = 10
+      import { Animationss } from "../animation-core";
+      let a = new Animationss('test', 5, "wow")
+      console.log(a)
+      const buttons = document.querySelectorAll('button')
+    buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      a.addition();
+    });
+  });
+      let total_num = 10
 
-      squares = {
+      let squares = {
         15: "fifteen",
         14: "fourteen",
         13: "thirteen",
@@ -46,109 +41,14 @@ import BaseLayout from "../layouts/BaseLayout.astro"
     <h2 id="number" class="bignum">10</h2>
 
     <div id="mega-div" style="overflow: hidden">
-      <div id="first-div" style="float: left">
+      <div id="first-div">
         <div id="one" class="square"></div>
         <div id="two" class="square"></div>
         <div id="three" class="square"></div>
-        <div id="four" class="square"></div>
-        <div id="five" class="square"></div>
       </div>
-  
-      <div id="second-div" style="float: left">
-        <div id="six" class="square"></div>
-        <div id="seven" class="square"></div>
-        <div id="eight" class="square"></div>
-        <div id="nine" class="square"></div>
-        <div id="ten" class="square"></div>
-      </div>
-
-      <div id="third-div" style="float: left">
-        <div id="eleven" class="square inactive"></div>
-        <div id="twelve" class="square inactive"></div>
-        <div id="thirteen" class="square inactive"></div>
-        <div id="fourteen" class="square inactive"></div>
-        <div id="fifteen" class="square inactive"></div>
-      </div>
-
     </div>
 
-    <script>
-        anime({
-          targets: ".inactive",
-          translateX: 500,
-          duration: 0,
-          scale: 0,
-          easing: 'easeInOutSine',
-        })
 
-        function update_text() {
-          document.getElementById("number").innerHTML = total_num
-        }
-
-        function vanish() {
-          if (total_num <= 0) {
-            anime({
-              targets: "#number",
-              duration: 250,
-              translateX: [0, 4, -4, 0],
-              easing: 'easeInOutSine'
-            })
-            return
-          }
-
-
-          anime({
-            targets: "#" + squares[total_num],
-            translateX: 500,
-            duration: 800,
-            scale: 0,
-            easing: 'easeInOutSine',
-          })
-          total_num -= 1
-          update_text()
-          anime({
-            targets: "#number",
-            duration: 150,
-            translateY: [0, 8],
-            easing: 'easeInOutSine',
-            direction: 'alternate'
-          })
-        }
-
-        function appear() {
-          if (total_num >= 15) {
-            anime({
-              targets: "#number",
-              duration: 250,
-              translateX: [0, 4, -4, 0],
-              easing: 'easeInOutSine'
-            })
-            return
-          }
-
-          anime({
-            targets: "#" + squares[total_num + 1],
-            translateX: 0,
-            duration: 800,
-            scale: 1,
-            easing: 'easeInOutSine',
-          })
-          total_num += 1
-          update_text()
-          anime({
-            targets: "#number",
-            duration: 150,
-            translateY: [0, -8],
-            easing: 'easeInOutSine',
-            direction: 'alternate'
-          })
-        }
-    </script>
-
-    <button onclick="appear()">Add One</button>
-    <button onclick="vanish()">Drop One</button>
-
-
-
+    <button>Add</button>
   </main>
 </BaseLayout>
