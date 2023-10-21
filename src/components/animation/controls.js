@@ -26,7 +26,7 @@ export default arr => {
       clearTimeout(arr[index].timeout)
 
     const curr = arr[++index]
-    captions.innerText = curr.text
+    captions.innerHTML = curr.text
     controls.dataset.step = `Step ${index + 1}/${arr.length}`
 
     if (typeof queue !== "undefined") state.push(queue)
@@ -44,7 +44,7 @@ export default arr => {
     queue = state.pop() ?? ""
 
     const curr = arr[--index]
-    captions.innerText = curr.text
+    captions.innerHTML = curr.text
     controls.dataset.step = `Step ${index + 1}/${arr.length}`
     curr.play()
 

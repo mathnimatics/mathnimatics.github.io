@@ -1,0 +1,192 @@
+---
+import Canvas from "../../animation/canvas.astro"
+import Controls from "../../animation/controls.astro"
+---
+
+<style is:global>
+  #canvas * {
+    transition: 200ms;
+  }
+  #box {
+    height: 40%;
+    aspect-ratio: 1 / 1;
+    background-color: red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #n {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    font-weight: bold;
+  }
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    --o: 0;
+  }
+  #grid div {
+    background-color: red;
+    height: 50px;
+    width: 50px;
+  }
+  #grid::before {
+    content: "3";
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2em;
+    opacity: var(--o);
+  }
+  #grid::after {
+    content: "3";
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2em;
+    opacity: var(--o);
+  }
+
+  #times {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    font-weight: bold;
+    opacity: 0;
+  }
+</style>
+
+<Canvas />
+<Controls />
+
+<script>
+  import anime from "animejs"
+  import controls from "../../animation/controls.js"
+
+  if (window.location.href.split("/")[4] == "squaring") {
+    const canvas = document.getElementById("canvas")
+    controls([
+      {
+        text: "This is a square. (No, really.)",
+        play() {
+          const box = document.createElement("div")
+          box.id = "box"
+          canvas.appendChild(box)
+          anime({
+            targets: "#box",
+            opacity: [0, 1],
+          })
+        },
+      },
+      {
+        text: "And this is <em>also</em> a square.",
+        play() {
+          const n = document.createElement("span")
+          n.id = "n"
+          n.innerHTML = "n<sup>2</sup>"
+          canvas.appendChild(n)
+
+          anime({
+            targets: "#n",
+            opacity: [0, 1],
+          })
+        },
+      },
+      {
+        text: "But... why?",
+        play() {
+          anime({
+            targets: "#box",
+            translateX: "-1000px",
+            opacity: [1, 0],
+            complete() {
+              document.getElementById("box").remove()
+            },
+          })
+          anime({
+            targets: "#n",
+            translateX: "1000px",
+            opacity: [1, 0],
+            complete() {
+              document.getElementById("n").remove()
+            },
+          })
+        },
+      },
+      {
+        text: "Here're some smaller squares.",
+        play() {
+          const grid = document.createElement("div")
+          grid.id = "grid"
+          canvas.appendChild(grid)
+
+          for (let i = 0; i < 9; i++) {
+            const div = document.createElement("div")
+            grid.appendChild(div)
+          }
+
+          anime({
+            targets: "#grid div",
+            scale: [0, 1],
+          })
+        },
+      },
+      {
+        text: "How many squares are there? (9. I think you can count.)",
+        play() {
+          document.getElementById("grid").style.setProperty("--o", "1")
+        },
+      },
+      {
+        text: "But is there a better way than manually counting the squares? (Why are the 3's there?)",
+        play() {},
+      },
+      {
+        text: "(Not) surprisingly, when we multiply the height and width of the square (which happen to be the same numbers), we get the number of squares.",
+        play() {
+          const timeline = anime.timeline()
+          timeline.add({
+            targets: "#grid div",
+            scale: [1, 0],
+            complete() {
+              document.getElementById("grid").remove()
+            },
+          })
+          const times = document.createElement("span")
+          times.id = "times"
+          times.innerHTML = "3 &times; 3 = 9"
+          canvas.appendChild(times)
+          timeline.add({
+            targets: "#times",
+            opacity: [0, 1],
+          })
+        },
+      },
+      {
+        text: "When we multiply the same number, this is called a <em>square</em>. (Get it?)",
+        play() {
+          anime({
+            targets: "#times",
+            innerHTML: "3<sup>2</sup>",
+            round: 1,
+          })
+        },
+      },
+    ])
+  }
+</script>
