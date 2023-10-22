@@ -17,3 +17,6 @@ The step-by-step process is handled by the `animation/controls.js` file. Import 
 }
 ```
 Once you've completed your animation and verified that it works, create a pull request and we'll handle the rest!
+
+## Background
+This was a project submission for the DA Hacks hackathon, which made it into the finals. Now, it is solely here for the sake of verbwire and potatoes.
